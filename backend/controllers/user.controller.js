@@ -105,3 +105,62 @@ export const logout = async(__, res)=>{
         })
     }
 }
+
+
+export const updateProfile = async(req, res) => {
+    try {
+        const userId = req.userId; 
+        const { name, description } = req.body;
+        const file = req.file;
+
+        let cloudResponse = null;
+        if (file) {
+            const fileUri = getDataUri(file);
+            cloudResponse = await cloudinary.uploader.upload(fileUri);
+        }
+
+        const user = await User.findById(userId).select("-password");
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found",
+                success: false,
+            });
+        }
+
+        // updating data
+        if (name) user.name = name;
+        if (description) user.description = description;
+        if (cloudResponse) user.photoUrl = cloudResponse.secure_url;
+
+        await user.save();
+
+        return res.status(200).json({
+            message: "Profile updated successfully",
+            success: true,
+            user,
+        });
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Failed to update profile",
+        });
+    }
+};
+
+
+export const deleteUser = async (req, res) => {
+  try {
+       const userId = req.userId; 
+    await User.findByIdAndDelete(userId);
+
+
+    res.status(200).json({ success: true, message: 'User account deleted successfully.' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Server error, please try again later.' });
+  }
+};
+
