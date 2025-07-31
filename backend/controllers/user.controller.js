@@ -1,6 +1,9 @@
 import { User } from "../models/user.model.js";
+import  {Course} from "../models/course.model.js"
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
+import getDataUri from "../utils/dataUri.js";
+import cloudinary from "../utils/cloudinary.js";
 
 
 
@@ -164,3 +167,97 @@ export const deleteUser = async (req, res) => {
   }
 };
 
+
+
+
+
+export const enrollInCourse = async (req, res) => {
+  const { userId, courseId } = req.params;
+
+  try {
+    console.log('Enroll request:', { userId, courseId });
+
+    const user = await User.findById(userId);
+    if (!user) {
+      console.log('User not found');
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const course = await Course.findById(courseId);
+    if (!course) {
+      console.log('Course not found');
+      return res.status(404).json({ message: 'Course not found' });
+    }
+
+    if (!Array.isArray(user.enrolledCourses)) {
+      console.log('enrolledCourses is not an array:', user.enrolledCourses);
+      user.enrolledCourses = [];
+    }
+
+    if (user.enrolledCourses.includes(courseId)) {
+      return res.status(400).json({ message: 'User already enrolled in this course' });
+    }
+
+    user.enrolledCourses.push(courseId);
+    await user.save();
+
+    res.status(200).json({ success: true, message: 'User enrolled successfully', updatedUser: user });
+
+  } catch (error) {
+    console.error('Enrollment error:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+
+
+export const unenrollFromCourse = async (req, res) => {
+  const { userId, courseId } = req.params;
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const course = await Course.findById(courseId);
+    if (!course) {
+      return res.status(404).json({ message: 'Course not found' });
+    }
+
+    // Check if enrolled
+    if (!user.enrolledCourses.includes(courseId)) {
+      return res.status(400).json({ message: 'User is not enrolled in this course' });
+    }
+
+    // Remove the courseId from enrolledCourses array
+    user.enrolledCourses = user.enrolledCourses.filter(
+      (id) => id.toString() !== courseId
+    );
+
+    await user.save();
+
+    res.status(200).json({ success: true, message: 'User unenrolled successfully', updatedUser: user });
+  } catch (error) {
+    console.error('Unenroll error:', error);
+    res.status(500).json({ success:false , message: 'Internal server error' });
+  }
+};
+
+export const getEnrolledCourses = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    // Find user and populate enrolledCourses
+    const user = await User.findById(userId).populate('enrolledCourses');
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    res.json({ success: true, courses: user.enrolledCourses });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
