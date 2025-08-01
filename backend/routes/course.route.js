@@ -1,6 +1,6 @@
 import express from "express"
-
-import {  getPublishedCourse, togglePublishedCourse } from "../controllers/course.controller.js"
+import { isAuthenticated } from "../middleware/isAuthenticated.js"
+import { createCourse,  getCreatorCourses, getPublishedCourse,  togglePublishedCourse} from "../controllers/course.controller.js"
 
 
 const router = express.Router()
@@ -9,6 +9,9 @@ const router = express.Router()
 router.get('/published-courses', getPublishedCourse);
 router.patch('/:courseId', togglePublishedCourse); // toggle published status
 
+// COURSE MANAGEMENT ROUTES (creator/admin actions)
+router.post('/', isAuthenticated, createCourse);
+router.get('/', isAuthenticated, getCreatorCourses);
 
 
 
