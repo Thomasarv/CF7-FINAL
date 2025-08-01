@@ -1,6 +1,6 @@
 import express from "express"
 import { isAuthenticated } from "../middleware/isAuthenticated.js"
-import { createCourse,  deleteCourse, editCourse,   getCourseById,  getCreatorCourses, getPublishedCourse, togglePublishedCourse , getCourseLecture, createLecture} from "../controllers/course.controller.js"
+import { createCourse, createLecture, deleteCourse, editCourse, editLecture,  getCourseById, getCourseLecture, getCreatorCourses, getPublishedCourse, removeLecture, togglePublishedCourse} from "../controllers/course.controller.js"
 import { singleUpload } from "../middleware/multer.js"
 
 const router = express.Router()
@@ -19,6 +19,8 @@ router.delete('/:courseId', isAuthenticated, deleteCourse);
 // LECTURE MANAGEMENT ROUTES
 router.get('/:courseId/lecture', isAuthenticated, getCourseLecture);
 router.post('/:courseId/lecture', isAuthenticated, createLecture);
+router.post('/:courseId/lecture/:lectureId', isAuthenticated, editLecture);
+router.delete('/lecture/:lectureId', isAuthenticated, removeLecture);
 
 
 
