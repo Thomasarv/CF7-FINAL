@@ -1,11 +1,22 @@
 import { Award, Search, User } from 'lucide-react'
-import React  from 'react'
+import React, { useState } from 'react'
 import HeroImg from '../assets/HeroImg.png'
 import CountUp from 'react-countup'
-
+import { useNavigate } from 'react-router-dom'
 
 const Hero = () => {
+  const [searchTerm, setSearchTerm] = useState('')
+  const navigate = useNavigate()
 
+  const handleSearch = () => {
+    if (searchTerm.trim()) {
+      navigate(`/courses?search=${encodeURIComponent(searchTerm)}`)
+    }
+  }
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') handleSearch()
+  }
 
   return (
     <div className='bg-slate-800 pt-14'>
@@ -21,13 +32,15 @@ const Hero = () => {
           </p>
           <div className='inline-flex relative w-full max-w-md'>
             <input
-              
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyDown={handleKeyDown}
               type="text"
               placeholder='Search Your Course Here...'
               className='bg-gray-200 w-full text-gray-800 p-4 pr-40 rounded-lg rounded-r-xl placeholder:text-gray-500'
             />
             <button
-              
+              onClick={handleSearch}
               className='px-4 py-[14px] flex gap-1 items-center bg-blue-500 font-semibold absolute right-0 text-white rounded-r-lg text-xl'
             >
               Search <Search width={20} height={20} />
