@@ -1,12 +1,60 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import React  from 'react'
-import { Link } from 'react-router-dom'
-
+import { setUser } from '@/redux/authSlice'
+import axios from 'axios'
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
 
 const Login = () => {
-   
+      const backendURL = import.meta.env.VITE_BACKEND_URL;
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+    const [input, setInput] = useState({
+        email:"",
+        password:""
+    })
+    const handleChange =(e)=>{
+        
+        const {name, value} = e.target
+        setInput((prev)=> ({
+            ...prev,
+            [name]:value,
+        }))
+    }
+
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const response = await axios.post(
+      `${backendURL}/api/user/login`,
+      input,
+      {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      }
+    );
+
+    if (response.data.success) {
+      navigate("/");
+      dispatch(setUser(response.data.user));
+      toast.success(response.data.message);
+    } else {
+      toast.error("Something went wrong");
+    }
+  } catch (error) {
+    // If server sent a response with message, show it
+    if (error.response && error.response.data && error.response.data.message) {
+      toast.error(error.response.data.message);
+    } else {
+      // fallback error message
+      toast.error("Login failed. Please try again.");
+    }
+    console.log(error);
+  }
+};
 
     return (
         <div className='flex justify-center items-center min-h-screen bg-gray-100'>
@@ -19,7 +67,8 @@ const Login = () => {
                     <Input placeholder="Enter Your Email" 
                     type="email"
                     name="email" 
-                   
+                    value={input.email} 
+                    onChange={handleChange}
                     />
                 </div>
                 <div className='mb-4'>
@@ -27,11 +76,12 @@ const Login = () => {
                     <Input placeholder="Enter Your Password" 
                     type="password"
                      name="password" 
-                    
+                     value={input.password} 
+                     onChange={handleChange}
                     />
                 </div>
                 
-                <Button  className="w-full bg-blue-500 hover:bg-blue-600">Login</Button>
+                <Button onClick={handleSubmit} className="w-full bg-blue-500 hover:bg-blue-600">Login</Button>
                 {/* divider */}
                 <div className='flex items-center my-6'>
                     <hr className='flex-grow border-gray-300' />
