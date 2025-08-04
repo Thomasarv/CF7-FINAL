@@ -432,13 +432,15 @@ const CourseTab = () => {
             </div>
           </div>
 
+         
           <div>
             <Label>Target Audience</Label>
-            <Input
-              type="text"
+            <textarea
               name="targetAudience"
               value={input.targetAudience}
-              onChange={changeEventHandler}
+              onChange={(e) => setInput({ ...input, targetAudience: e.target.value })}
+              rows={3} // same as Features
+              className="w-full border rounded p-2"
               placeholder="Who is this course for?"
             />
           </div>

@@ -424,7 +424,7 @@ const CourseDetails = () => {
                   <Separator className="my-2" />
                   <p className="text-gray-700">
                     {courseLecture[currentLectureIndex]?.description ||
-                      selectedCourse?.description}
+                      "No description added yet."}
                   </p>
                 </CardContent>
               </Card>
