@@ -40,9 +40,11 @@ const Home = () => {
               No courses available at the moment.
             </p>
           ) : (
-            coursesToShow.slice(0, 6).map((courseItem) => (
-              <CourseCard key={courseItem._id} course={courseItem} />
-            ))
+            
+            coursesToShow.map((courseItem) => (
+            <CourseCard key={courseItem._id} course={courseItem} />
+          ))
+          
           )}
         </div>
       </div>
