@@ -29,7 +29,14 @@ const Signup = () => {
 
 const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(user);
+    
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(user.email)) {
+        toast.error("Please enter a valid email address.");
+        return;
+    }
     try {
         const response = await axios.post(`${backendURL}/api/user/register`, user, {
             headers: {
@@ -82,6 +89,8 @@ const handleSubmit = async (e) => {
                     name="email"
                     onChange={handleChange}
                     value={user.email}
+                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                    title="Please enter a valid email address"
                      />
                 </div>
                 <div className='mb-4'>
