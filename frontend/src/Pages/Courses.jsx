@@ -7,7 +7,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 
 const Courses = () => {
-      const backendURL = import.meta.env.VITE_BACKEND_URL;
+  const backendURL = import.meta.env.VITE_BACKEND_URL;
   const dispatch = useDispatch()
   const { course } = useSelector((store) => store.course)
   const location = useLocation()

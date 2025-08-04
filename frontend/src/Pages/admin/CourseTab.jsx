@@ -20,7 +20,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
 
 const CourseTab = () => {
-      const backendURL = import.meta.env.VITE_BACKEND_URL;
+  const backendURL = import.meta.env.VITE_BACKEND_URL;
   const params = useParams()
   const id = params.courseId
   const navigate = useNavigate()

@@ -17,7 +17,7 @@ import { Badge } from '@/components/ui/badge'
 import { Edit } from 'lucide-react'
 
 const Course = () => {
-      const backendURL = import.meta.env.VITE_BACKEND_URL;
+  const backendURL = import.meta.env.VITE_BACKEND_URL;
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { course } = useSelector(store => store.course)
