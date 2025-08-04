@@ -1,4 +1,7 @@
 import { Course } from "../models/course.model.js";
+import { Lecture } from "../models/lecture.model.js";
+import cloudinary from "../utils/cloudinary.js";
+import streamifier from 'streamifier'
 
 
 
