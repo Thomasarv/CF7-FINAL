@@ -23,6 +23,10 @@ A full-featured Learning Management System built with the **MERN stack** (MongoD
 - **Profile**: User dashboard (if authenticated)
 - **Admin Dashboard**: Only for instructors to manage content
 
+ ### 📱 Mobile Responsive
+- Fully responsive layout across devices using TailwindCSS
+- Adaptive navigation and UI components for smaller screens
+- Ensures smooth experience on phones, tablets, and desktops
 ---
 
 ## 🏗️ Project Structure
